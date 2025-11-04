@@ -11,4 +11,4 @@ COPY index.html /usr/share/nginx/html/index.html
 EXPOSE 80
 
 # The default Nginx command will run
-cmd ["nginx","-g","daemon off;"]
+CMD ["nginx","-g","daemon off;"]
