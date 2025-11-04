@@ -20,6 +20,12 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code from GitHub...'
+                git branch: 'main', credentialsId: 'github-creds', url: 'https://github.com/yashpotdar4536/devsecops-project.git'
+            }
+        }
         
 
         stage('Build Docker Image') {
