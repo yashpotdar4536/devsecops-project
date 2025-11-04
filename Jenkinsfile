@@ -1,12 +1,10 @@
 // Jenkinsfile
 pipeline {
     agent {
-        // This tells Jenkins to run steps inside a Docker container
-        // that has all the Docker command-line tools installed.
         docker { 
             image 'docker:latest' 
-            // This is needed to allow the container to use the host's Docker daemon
-            args '-v /var/run/docker.sock:/var/run/docker.sock' 
+            // Run as root, override the entrypoint, AND mount the Docker socket
+            args '-u root --entrypoint="" -v /var/run/docker.sock:/var/run/docker.sock' 
         }
     }
     // ...
@@ -23,7 +21,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
-                git branch: 'main', credentialsId: 'github-creds', url: 'https://github.com/yashpotdar4536/devsecops-project.git'
+                git branch: 'main', credentialsId: 'github-creds1', url: 'https://github.com/yashpotdar4536/devsecops-project.git'
             }
         }
         
