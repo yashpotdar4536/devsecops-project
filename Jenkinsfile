@@ -1,6 +1,15 @@
 // Jenkinsfile
 pipeline {
-    agent any // Run on any available Jenkins agent
+    agent {
+        // This tells Jenkins to run steps inside a Docker container
+        // that has all the Docker command-line tools installed.
+        docker { 
+            image 'docker:latest' 
+            // This is needed to allow the container to use the host's Docker daemon
+            args '-v /var/run/docker.sock:/var/run/docker.sock' 
+        }
+    }
+    // ...
 
     // Environment variables used throughout the pipeline
     environment {
@@ -11,12 +20,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Checking out code from GitHub...'
-                git branch: 'main', credentialsId: 'github-creds', url: ' git@github.com:yashpotdar4536/devsecops-project.git'
-            }
-        }
+        
 
         stage('Build Docker Image') {
             steps {
