@@ -1,0 +1,6 @@
+[webserver]
+51.20.71.117
+
+[webserver:vars]
+ansible_user=ubuntu
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
