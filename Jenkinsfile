@@ -64,8 +64,8 @@ pipeline {
                 echo 'Deploying to EC2 production server...'
                 // Use the Ansible plugin
                 ansiblePlaybook(
-                    playbook: 'ansible/deploy.yml',
-                    inventory: 'ansible/inventory',
+                    playbook: 'deploy.yml',
+                    inventory: 'inventory',
                     credentialsId: ANSIBLE_SSH_ID,
                     // Pass the build number as an 'extraVar' to the playbook
                     extraVars: [image_tag: "${env.BUILD_NUMBER}"]
