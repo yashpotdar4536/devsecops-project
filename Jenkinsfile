@@ -1,10 +1,11 @@
-// Jenkinsfile
 pipeline {
-    
-    // ...
+// Run on the main Jenkins controller.
+// This works because we already configured this container
+// for Docker-out-of-Docker (DooD)
+agent any
 
-    // Environment variables used throughout the pipeline
-   environment {
+// Environment variables used throughout the pipeline
+environment {
     DOCKER_IMAGE_NAME = "yashpotdar4536/devsecops-project"
     DOCKER_CREDS_ID   = "docker-hub-creds"
     SNYK_TOKEN_ID     = "snyk-token"
@@ -73,7 +74,7 @@ stages {
                 // the SSH key, and disabling host key checking.
                 sh """
                     docker run --rm -i \
-                      -v ${pwd}:/work \
+                      -v ${pwd()}:/work \
                       -v ${ANSIBLE_KEY_FILE}:/ansible_ssh_key \
                       -w /work \
                       -e "ANSIBLE_HOST_KEY_CHECKING=False" \
@@ -114,4 +115,6 @@ post {
         )
     }
 }
+
+
 }
