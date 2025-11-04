@@ -1,0 +1,28 @@
+---
+- name: Deploy Nginx Container
+  hosts: webserver
+  become: yes # Use sudo
+  
+  vars:
+    # 'image_tag' will be passed from Jenkins. Default to 'latest'
+    docker_image: "yashpotdar4536/devsecops-project:{{ image_tag | default('latest') }}"
+
+  tasks:
+    - name: Pull latest image from Docker Hub
+      docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+        
+    - name: Stop and remove existing container
+      docker_container:
+        name: nginx-web-app
+        state: absent
+        
+    - name: Start new container
+      docker_container:
+        name: nginx-web-app
+        image: "{{ docker_image }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80" # Map host port 80 to container port 80
