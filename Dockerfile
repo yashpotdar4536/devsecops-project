@@ -1,5 +1,5 @@
 # Use a lightweight Nginx image
-FROM nginx:1.25-alpine
+FROM nginx:latest
 
 # Remove the default Nginx content
 RUN rm -rf /usr/share/nginx/html/*
@@ -11,3 +11,4 @@ COPY index.html /usr/share/nginx/html/index.html
 EXPOSE 80
 
 # The default Nginx command will run
+cmd ["nginx","-g","daemon off;"]
