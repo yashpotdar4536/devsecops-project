@@ -1,5 +1,5 @@
 # Use a lightweight Nginx image
-FROM nginx:latest
+FROM nginx:alpine
 
 # Remove the default Nginx content
 RUN rm -rf /usr/share/nginx/html/*
