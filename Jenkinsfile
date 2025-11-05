@@ -30,7 +30,10 @@ pipeline {
         stage('Security Scan: Trivy') {
             steps {
                 echo 'Scanning with Trivy...'
-                // ... (cache creation line) ...
+                
+                // V V V THIS IS THE MISSING STEP V V V
+                // Create the cache directory on the Jenkins server first
+                sh "mkdir -p /var/jenkins_home/trivy-cache"
                 
                 sh """
                     docker run --rm \
