@@ -26,15 +26,19 @@ pipeline {
             }
         }
 
-       stage('Security Scan: Snyk') {
+      stage('Security Scan: Snyk') {
             steps {
                 echo 'Scanning with Snyk...'
-                withCredentials([string(credentialsId: SNYK_TOKEN_ID, variable: 'SNYK_TOKEN')]) {
+                // 1. Bind to an ENVIRONMENT variable, not a Groovy variable.
+                //    This fixes the 'insecure' warning.
+                withCredentials([string(credentialsId: SNYK_TOKEN_ID, environment: 'SNYK_TOKEN')]) {
+                    
+                    // 2. Use "sh" with triple-double-quotes
                     sh """
                         docker run --rm \
                         -v /var/run/docker.sock:/var/run/docker.sock \
-                        -e SNYK_TOKEN=${SNYK_TOKEN} \
-                        snyk/snyk:docker container test ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --file=Dockerfile
+                        -e SNYK_TOKEN=\$SNYK_TOKEN \
+                        snyk/snyk:cli container test ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --file=Dockerfile
                     """
                 }
             }
