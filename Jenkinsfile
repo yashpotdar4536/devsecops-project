@@ -30,10 +30,16 @@ pipeline {
         stage('Security Scan: Trivy') {
             steps {
                 echo 'Scanning with Trivy...'
-                // Run Trivy in a Docker container to scan our new image
-                // Fail the build (--exit-code 1) for HIGH or CRITICAL severities
-                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-                    aquasec/trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                // ... (cache creation line) ...
+                
+                sh """
+                    docker run --rm \
+                    -v /var/run/docker.sock:/var/run/docker.sock \
+                    -v /var/jenkins_home/trivy-cache:/root/.cache/trivy \
+                    aquasec/trivy image \
+                    --scanners vuln \
+                    --exit-code 1 --severity HIGH,CRITICAL ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}
+                """
             }
         }
 
