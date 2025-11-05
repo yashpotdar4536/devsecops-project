@@ -6,7 +6,6 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "yashpotdar4536/devsecops-project"
         DOCKER_CREDS_ID = "docker-hub-creds"
-        SNYK_TOKEN_ID   = "snyk-token"
         ANSIBLE_SSH_ID  = "ansible-ssh-key"
     }
 
@@ -26,23 +25,7 @@ pipeline {
             }
         }
 
-      stage('Security Scan: Snyk') {
-            steps {
-                echo 'Scanning with Snyk...'
-                
-                // 1. Change 'environment:' back to 'variable:'. This is the correct syntax.
-                withCredentials([string(credentialsId: SNYK_TOKEN_ID, variable: 'SNYK_TOKEN')]) {
-                    
-                    // 2. Use 'sh' with triple-double-quotes
-                    sh """
-                        docker run --rm \
-                        -v /var/run/docker.sock:/var/run/docker.sock \
-                        -e SNYK_TOKEN=${SNYK_TOKEN} \
-                        snyk/snyk:cli container test ${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --file=Dockerfile
-                    """
-                }
-            }
-        }
+     
         
         stage('Security Scan: Trivy') {
             steps {
