@@ -30,9 +30,14 @@ pipeline {
             steps {
                 echo 'Scanning with Snyk...'
                 withCredentials([string(credentialsId: SNYK_TOKEN_ID, variable: 'SNYK_TOKEN')]) {
-                    // Tell Snyk which image to scan and use the token
-                    sh "snyk container test ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --file=Dockerfile --token=${SNYK_TOKEN}"
-                    // Note: Snyk will fail the build if it finds vulnerabilities (default behavior)
+                    // Run the Snyk scan inside a Docker container
+                    // This is the same pattern you use for Trivy
+                    sh """
+                        docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -e SNYK_TOKEN=${SNYK_TOKEN} \
+                        snyk/snyk:latest container test ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --file=Dockerfile
+                    """
                 }
             }
         }
