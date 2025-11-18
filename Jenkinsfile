@@ -4,6 +4,7 @@ pipeline {
 
     // Environment variables used throughout the pipeline
     environment {
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${env.PATH}"
         DOCKER_IMAGE_NAME = "yashpotdar4536/devsecops-project"
         DOCKER_CREDS_ID = "docker-hub-creds"
         ANSIBLE_SSH_ID  = "ansible-ssh-key"
