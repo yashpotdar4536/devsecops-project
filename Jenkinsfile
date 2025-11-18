@@ -86,7 +86,7 @@ pipeline {
             emailext (
                 to: "yashpotdar4536@gmail.com",
                 subject: "SUCCESS: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                body: "Pipeline finished successfully. Check the deployment at http://51.20.71.117"
+                body: "Pipeline finished successfully. Check the deployment at http://13.48.130.210"
             )
         }
         failure {
