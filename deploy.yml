@@ -5,7 +5,7 @@
   
   vars:
     # 'image_tag' will be passed from Jenkins. Default to 'latest'
-    docker_image: "yashpotdar4536/devsecops-project:{{ image_tag | default('latest') }}"
+    docker_image: "nginx:alpine"
 
   tasks:
     - name: Pull latest image from Docker Hub
